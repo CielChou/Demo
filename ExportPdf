@@ -1,0 +1,34 @@
+     void ExportPdf
+     {           
+                LocalReport Report = new LocalReport();
+                orderReport.DisplayName = id.ToString();
+                orderReport.ReportPath = "Reports/Report.rdlc";
+                 ReportParameter[] rps ={
+                                       new ReportParameter("pName", Student.Name),
+                                       new ReportParameter("pAge", Student.Age)
+            };
+            orderReport.SetParameters(rps);
+            DataTable datasouce=data.getData();
+            ReportDataSource dataSource = new ReportDataSource("DataSouceName",datasouce);
+            orderReport.DataSources.Add(dataSource);
+            ExportFile(orderReport,"PDF",".pdf",Response);
+    }
+ 
+  private static void ExportFile(LocalReport report, string fileType,string ext,System.Web.HttpResponseBase Response)
+        {
+            try
+            {
+                var bytes = report.Render(fileType);
+                var fileName = report.DisplayName + ext;
+
+                Response.ContentType = "application/octet-stream";
+                Response.AddHeader("Content-Disposition", "attachment;   filename=" + fileName);
+                Response.BinaryWrite(bytes);
+                Response.Flush();
+                Response.End();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
