@@ -1,9 +1,9 @@
-     void ExportPdf
+     void ExportPdf()
      {           
                 LocalReport Report = new LocalReport();
-                orderReport.DisplayName = id.ToString();
-                orderReport.ReportPath = "Reports/Report.rdlc";
-                 ReportParameter[] rps ={
+                Report.DisplayName = id.ToString();
+                Report.ReportPath = "Reports/Report.rdlc";
+                ReportParameter[] rps ={
                                        new ReportParameter("pName", Student.Name),
                                        new ReportParameter("pAge", Student.Age)
             };
@@ -14,7 +14,7 @@
             ExportFile(orderReport,"PDF",".pdf",Response);
     }
  
-  private static void ExportFile(LocalReport report, string fileType,string ext,System.Web.HttpResponseBase Response)
+        private static void ExportFile(LocalReport report, string fileType,string ext,System.Web.HttpResponseBase Response)
         {
             try
             {
