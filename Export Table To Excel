@@ -1,0 +1,50 @@
+public void ExcelTable(DataTable dt)
+    {
+        if (dt.Rows.Count > 0)
+        {
+            try
+            {
+                string dateM = "duobao_" + DateTime.Now.ToString("yyyyMMdd");
+                string folderName = ConfigurationManager.AppSettings["folderPath"].ToString();
+                string newFileName = Server.MapPath("\\") + folderName + ViewState["ReportName"] + dateM + ".xls";
+
+                string downFile = folderName + ViewState["ReportName"] + dateM + ".xls";
+                StreamWriter sw = File.CreateText(newFileName);
+                sw.Flush();
+                sw.Close();
+                string FileName = newFileName;
+                FileStream objFileStream;
+                StreamWriter objStreamWriter;
+                string strline = "序号" + Convert.ToChar(9).ToString();
+                objFileStream = new FileStream(FileName, FileMode.OpenOrCreate, FileAccess.Write);
+                objStreamWriter = new StreamWriter(objFileStream, Encoding.Unicode);
+                for (int i = 0; i < dt.Columns.Count; i++)
+                {
+                    strline = strline + dt.Columns[i].ColumnName.ToString() + Convert.ToChar(9);
+                }
+                objStreamWriter.WriteLine(strline);
+                strline = "";   
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    strline = strline + (i + 1) + Convert.ToChar(9);
+                    for (int j = 0; j < dt.Columns.Count; j++)
+                    {
+                        strline = strline + dt.Rows[i][j].ToString() + Convert.ToChar(9);
+                    }
+                    objStreamWriter.WriteLine(strline);
+                    strline = "";
+                }
+                objStreamWriter.Close();
+                objFileStream.Close();
+                string downUrl = Request.Url.Authority.ToString();
+                string urlName = "http://" + downUrl + "/" + downFile;
+                Response.Redirect(urlName);
+            }
+            catch (Exception e)
+            {
+                Response.Write("<script>alert('导出EXCEL时出错！" + e.Message + "');history.go(-1);</script>");
+            }
+          
+        }
+        
+    }
