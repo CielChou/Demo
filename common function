@@ -1,0 +1,48 @@
+public  class commonfunction()
+{
+
+
+
+#region 读取XML相关信息
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="xml">要读取的XML</param>
+        /// <param name="RootNodeName">根节点</param>
+        /// <param name="secondRootName">第二节点</param>
+        /// <param name="ChildNode">第三节点</param>
+        /// <returns></returns>
+        public static string ReadXmlInfo(string xml, string RootNodeName,string secondRootName, string ChildNode)
+        {
+            string NodeValue= "";
+            try
+            {
+                XmlDocument xmltemp = new XmlDocument();
+                xmltemp.LoadXml(xml);
+                XmlNodeList NodeList = xmltemp.SelectSingleNode(RootNodeName).ChildNodes;
+                foreach (XmlNode xn in NodeList)
+                {
+                    if (xn.Name == secondRootName)
+                    {
+                        foreach (XmlNode item in xn.ChildNodes)
+                        {
+                            if (item.Name == ChildNode)
+                            {
+                                NodeValue=item.InnerText;
+                            }
+ 
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+
+            }
+
+            return NodeValue;
+        }
+        #endregion
+
+}
